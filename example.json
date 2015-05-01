@@ -1,0 +1,112 @@
+{
+  "G1511M": {
+    "code": "G1511M",
+    "name": "英文(一)",
+    "url": "http://selquery.ttu.edu.tw/Main/SbjDetail.php?SbjNo=G1511M",
+    "time": [
+      {
+        "day": "四",
+        "period": "一",
+        "classroom": "A8-B208"
+      },
+      {
+        "day": "四",
+        "period": "二",
+        "classroom": "A8-B208"
+      }
+    ],
+    "textbook": "Q: Skills for Success (3) , by Margot F. Gramer and Colin S. Ward.  Oxford University Press, 2011.",
+    "reference": "",
+    "lecturer": "張文漢",
+    "required": true,
+    "credits": 2
+  },
+  "G1511N": {
+    "code": "G1511N",
+    "name": "英文(一)",
+    "url": "http://selquery.ttu.edu.tw/Main/SbjDetail.php?SbjNo=G1511N",
+    "time": [
+      {
+        "day": "四",
+        "period": "一",
+        "classroom": "A8-B202"
+      },
+      {
+        "day": "四",
+        "period": "二",
+        "classroom": "A8-B202"
+      }
+    ],
+    "textbook": "Q: Skills for Success (3) , by Margot F. Gramer and Colin S. Ward.  Oxford University Press, 2011.",
+    "reference": "",
+    "lecturer": "梁穎",
+    "required": true,
+    "credits": 2
+  },
+  "G1511O": {
+    "code": "G1511O",
+    "name": "英文(一)",
+    "url": "http://selquery.ttu.edu.tw/Main/SbjDetail.php?SbjNo=G1511O",
+    "time": [
+      {
+        "day": "四",
+        "period": "一",
+        "classroom": "A5-502"
+      },
+      {
+        "day": "四",
+        "period": "二",
+        "classroom": "A5-502"
+      }
+    ],
+    "textbook": "Q: Skills for Success (3) , by Margot F. Gramer and Colin S. Ward.  Oxford University Press, 2011.",
+    "reference": "http://www.myet.com.tw; http://easytest.ttu.edu.tw; http://testpro.ttu.edu.tw",
+    "lecturer": "蘇安德",
+    "required": true,
+    "credits": 2
+  },
+  "G1511P": {
+    "code": "G1511P",
+    "name": "英文(一)",
+    "url": "http://selquery.ttu.edu.tw/Main/SbjDetail.php?SbjNo=G1511P",
+    "time": [
+      {
+        "day": "四",
+        "period": "一",
+        "classroom": "A8-B113"
+      },
+      {
+        "day": "四",
+        "period": "二",
+        "classroom": "A8-B113"
+      }
+    ],
+    "textbook": "Q: Skills for Success (3) , by Margot F. Gramer and Colin S. Ward.  Oxford University Press, 2011.",
+    "reference": "",
+    "lecturer": "王志貴",
+    "required": true,
+    "credits": 2
+  },
+  "G1511Q": {
+    "code": "G1511Q",
+    "name": "英文(一)",
+    "url": "http://selquery.ttu.edu.tw/Main/SbjDetail.php?SbjNo=G1511Q",
+    "time": [
+      {
+        "day": "四",
+        "period": "一",
+        "classroom": "A8-B204"
+      },
+      {
+        "day": "四",
+        "period": "二",
+        "classroom": "A8-B204"
+      }
+    ],
+    "textbook": "Q: Skills for Success (3) , by Margot F. Gramer and Colin S. Ward.  Oxford University Press, 2011.",
+    "reference": "",
+    "lecturer": "江朝偉",
+    "required": true,
+    "credits": 2
+  }
+}

@@ -1,0 +1,6 @@
+gem 'capybara'
+gem 'json'
+gem 'pry'
+gem 'nokogiri'
+gem 'rest-client'
+gem 'ruby-progressbar'
