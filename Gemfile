@@ -1,6 +1,5 @@
-gem 'capybara'
-gem 'json'
 gem 'pry'
 gem 'nokogiri'
 gem 'rest-client'
-gem 'ruby-progressbar'
+gem 'crawler_rocks'
+gem 'thread'
