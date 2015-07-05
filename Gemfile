@@ -1,5 +1,6 @@
+source "https://rubygems.org"
+
 gem 'pry'
-gem 'nokogiri'
-gem 'rest-client'
+
 gem 'crawler_rocks'
-gem 'thread'
+gem 'web_task_runner'

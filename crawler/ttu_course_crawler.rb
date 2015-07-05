@@ -1,5 +1,3 @@
-require 'ruby-progressbar'
-
 require 'json'
 require 'pry'
 
@@ -11,7 +9,6 @@ require 'thwait'
 require_relative './ttu_code'
 
 class TtuCourseCrawler
-  # include Capybara::DSL
   include CrawlerRocks::DSL
   include TtuCode
 
