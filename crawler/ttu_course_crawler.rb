@@ -111,85 +111,47 @@ class TtuCourseCrawler
                 print "parsing #{c_hash}...\n"
 
                 @courses[c_hash] = {} if @courses[c_hash].nil?
-                @courses[c_hash]["code"] = c_hash
-                @courses[c_hash]["name"] = classes[i+1]
-                @courses[c_hash]["url"] = urls[i/3]
-                @courses[c_hash]["time"] = [] if @courses[c_hash]["time"].nil?
-                @courses[c_hash]["department"] = departments[dep_code]
-                @courses[c_hash]["department_code"] = dep_code
-                @courses[c_hash]["class"] = groups[group_code]
-                @courses[c_hash]["group_code"] = group_code
+                @courses[c_hash][:code] = c_hash
+                @courses[c_hash][:name] = classes[i+1]
+                @courses[c_hash][:url] = urls[i/3]
+                @courses[c_hash][:time] = [] if @courses[c_hash][:time].nil?
+                @courses[c_hash][:department] = departments[dep_code]
+                @courses[c_hash][:department_code] = dep_code
+                @courses[c_hash][:class] = groups[group_code]
+                @courses[c_hash][:group_code] = group_code
+                @courses[c_hash][:year] = @year
+                @courses[c_hash][:term] = @term
 
-                @courses[c_hash]["time"] << {
+
+                @courses[c_hash][:time] << {
                   day: day,
                   period: period,
                   classroom: classroom
                 }
-                @courses[c_hash]["time"].uniq!
+                @courses[c_hash][:time].uniq!
 
-                course_days = []
-                course_periods = []
-                course_locations = []
-                @courses[c_hash]["time"].each do |time|
-                  course_days << time[:day]
-                  course_periods << time[:period]
-                  course_locations << time[:classroom]
-                end
-
-                @courses[c_hash].delete("time")
-
-                @courses[c_hash]["day_1"] = course_days[0]
-                @courses[c_hash]["day_2"] = course_days[1]
-                @courses[c_hash]["day_3"] = course_days[2]
-                @courses[c_hash]["day_4"] = course_days[3]
-                @courses[c_hash]["day_5"] = course_days[4]
-                @courses[c_hash]["day_6"] = course_days[5]
-                @courses[c_hash]["day_7"] = course_days[6]
-                @courses[c_hash]["day_8"] = course_days[7]
-                @courses[c_hash]["day_9"] = course_days[8]
-                @courses[c_hash]["period_1"] = course_periods[0]
-                @courses[c_hash]["period_2"] = course_periods[1]
-                @courses[c_hash]["period_3"] = course_periods[2]
-                @courses[c_hash]["period_4"] = course_periods[3]
-                @courses[c_hash]["period_5"] = course_periods[4]
-                @courses[c_hash]["period_6"] = course_periods[5]
-                @courses[c_hash]["period_7"] = course_periods[6]
-                @courses[c_hash]["period_8"] = course_periods[7]
-                @courses[c_hash]["period_9"] = course_periods[8]
-                @courses[c_hash]["location_1"] = course_locations[0]
-                @courses[c_hash]["location_2"] = course_locations[1]
-                @courses[c_hash]["location_3"] = course_locations[2]
-                @courses[c_hash]["location_4"] = course_locations[3]
-                @courses[c_hash]["location_5"] = course_locations[4]
-                @courses[c_hash]["location_6"] = course_locations[5]
-                @courses[c_hash]["location_7"] = course_locations[6]
-                @courses[c_hash]["location_8"] = course_locations[7]
-                @courses[c_hash]["location_9"] = course_locations[8]
-
-                unless @courses[c_hash]["textbook"] || @courses[c_hash]["reference"]
-                  # sleep(1) until (
-                  #   @parse_detail_threads.delete_if { |t| !t.status };  # remove dead (ended) threads
-                  #   @parse_detail_threads.count < (ENV['MAX_THREADS'] || 50)
-                  # )
-                  # @parse_detail_threads << Thread.new do
+                unless @courses[c_hash][:textbook] || @courses[c_hash][:reference]
+                  sleep(1) until (
+                    @parse_detail_threads.delete_if { |t| !t.status };  # remove dead (ended) threads
+                    @parse_detail_threads.count < (ENV['MAX_THREADS'] || 50)
+                  )
+                  @parse_detail_threads << Thread.new do
                     # puts "parse_syllabus: #{course_code}"
                     parse_syllabus(course_code, c_hash)
-                  # end
+                  end
                 end # unless need to parse_syllabus
 
                 # binding.pry
-                unless @courses[c_hash]["lecturer"] || @courses[c_hash]["required"] || @courses[c_hash]["credits"]
-                  # sleep(1) until (
-                  #   @parse_detail_threads.delete_if { |t| !t.status };  # remove dead (ended) threads
-                  #   @parse_detail_threads.count < (ENV['MAX_THREADS'] || 50)
-                  # )
-                  # @parse_detail_threads << Thread.new do
+                unless @courses[c_hash][:lecturer] || @courses[c_hash][:required] || @courses[c_hash][:credits]
+                  sleep(1) until (
+                    @parse_detail_threads.delete_if { |t| !t.status };  # remove dead (ended) threads
+                    @parse_detail_threads.count < (ENV['MAX_THREADS'] || 50)
+                  )
+                  @parse_detail_threads << Thread.new do
                     # puts "parse_detail: #{course_code}"
                     parse_detail(course_code, c_hash)
-                  # end
+                  end
                 end # unless parse_detail
-
-                @after_each_proc.call(course: @courses[c_hash]) if @after_each_proc
               end # 0.step(classes.count-1, 3)
             end # grids[0..-2].each_with_index
           end # rows.each_with_index
@@ -200,71 +162,71 @@ class TtuCourseCrawler
     end # departments.keys do
 
     ThreadsWait.all_waits(*@threads)
-    # ThreadsWait.all_waits(*@parse_detail_threads)
+    ThreadsWait.all_waits(*@parse_detail_threads)
 
     # deps = JSON.parse(File.read('ttu_code.json'));
 
-    # @update_threads = []
-    # @courses.each do |k, course|
-    #   sleep(1) until (
-    #     @update_threads.delete_if { |t| !t.status };  # remove dead (ended) threads
-    #     @update_threads.count < (ENV['MAX_THREADS'] || 30)
-    #   )
-    #   @update_threads << Thread.new do
-    #     # convert code
-    #     # deps.each do |k, v|
-    #     #   v.reverse_each do |dep|
-    #     #     if course["class"].include?(dep["department"])
-    #     #       # binding.pry
-    #     #       course["department_code"] = dep["code"]
-    #     #       break
-    #     #     end
-    #     #   end
-    #     # end
+    @update_threads = []
+    @courses.each do |k, course|
+      sleep(1) until (
+        @update_threads.delete_if { |t| !t.status };  # remove dead (ended) threads
+        @update_threads.count < (ENV['MAX_THREADS'] || 30)
+      )
+      @update_threads << Thread.new do
+        # convert code
+        # deps.each do |k, v|
+        #   v.reverse_each do |dep|
+        #     if course["class"].include?(dep["department"])
+        #       # binding.pry
+        #       course["department_code"] = dep["code"]
+        #       break
+        #     end
+        #   end
+        # end
 
-    #     # covert time table
-    #     course_days = []
-    #     course_periods = []
-    #     course_locations = []
-    #     course["time"].each do |time|
-    #       course_days << time[:day]
-    #       course_periods << time[:period]
-    #       course_locations << time[:classroom]
-    #     end
-    #     course.delete("time")
+        # covert time table
+        course_days = []
+        course_periods = []
+        course_locations = []
+        course[:time].each do |time|
+          course_days << time[:day]
+          course_periods << time[:period]
+          course_locations << time[:classroom]
+        end
+        course.delete(:time)
 
-    #     course["day_1"] = course_days[0]
-    #     course["day_2"] = course_days[1]
-    #     course["day_3"] = course_days[2]
-    #     course["day_4"] = course_days[3]
-    #     course["day_5"] = course_days[4]
-    #     course["day_6"] = course_days[5]
-    #     course["day_7"] = course_days[6]
-    #     course["day_8"] = course_days[7]
-    #     course["day_9"] = course_days[8]
-    #     course["period_1"] = course_periods[0]
-    #     course["period_2"] = course_periods[1]
-    #     course["period_3"] = course_periods[2]
-    #     course["period_4"] = course_periods[3]
-    #     course["period_5"] = course_periods[4]
-    #     course["period_6"] = course_periods[5]
-    #     course["period_7"] = course_periods[6]
-    #     course["period_8"] = course_periods[7]
-    #     course["period_9"] = course_periods[8]
-    #     course["location_1"] = course_locations[0]
-    #     course["location_2"] = course_locations[1]
-    #     course["location_3"] = course_locations[2]
-    #     course["location_4"] = course_locations[3]
-    #     course["location_5"] = course_locations[4]
-    #     course["location_6"] = course_locations[5]
-    #     course["location_7"] = course_locations[6]
-    #     course["location_8"] = course_locations[7]
-    #     course["location_9"] = course_locations[8]
+        course[:day_1] = course_days[0]
+        course[:day_2] = course_days[1]
+        course[:day_3] = course_days[2]
+        course[:day_4] = course_days[3]
+        course[:day_5] = course_days[4]
+        course[:day_6] = course_days[5]
+        course[:day_7] = course_days[6]
+        course[:day_8] = course_days[7]
+        course[:day_9] = course_days[8]
+        course[:period_1] = course_periods[0]
+        course[:period_2] = course_periods[1]
+        course[:period_3] = course_periods[2]
+        course[:period_4] = course_periods[3]
+        course[:period_5] = course_periods[4]
+        course[:period_6] = course_periods[5]
+        course[:period_7] = course_periods[6]
+        course[:period_8] = course_periods[7]
+        course[:period_9] = course_periods[8]
+        course[:location_1] = course_locations[0]
+        course[:location_2] = course_locations[1]
+        course[:location_3] = course_locations[2]
+        course[:location_4] = course_locations[3]
+        course[:location_5] = course_locations[4]
+        course[:location_6] = course_locations[5]
+        course[:location_7] = course_locations[6]
+        course[:location_8] = course_locations[7]
+        course[:location_9] = course_locations[8]
 
-    #     @after_each_proc.call(course: course) if @after_each_proc
-    #   end # end Thread
-    # end # @courses.map
-    # ThreadsWait.all_waits(*@update_threads)
+        @after_each_proc.call(course: course) if @after_each_proc
+      end # end Thread
+    end # @courses.map
+    ThreadsWait.all_waits(*@update_threads)
 
     @courses.values
   end
@@ -284,24 +246,24 @@ class TtuCourseCrawler
 
     _books = doc.css('table.cistab > tr:contains("教科書")')
     if not _books.empty? and not _books.css('td').empty?
-      @courses[c_hash]["textbook"] = _books.css('td').last.text.power_strip
+      @courses[c_hash][:textbook] = _books.css('td').last.text.power_strip
     end
 
     _ref = doc.css('table.cistab > tr:contains("參考教材")')
     if not _ref.empty? and not _ref.css('td').empty?
-      @courses[c_hash]["reference"] = _ref.css('td').last.text.power_strip
+      @courses[c_hash][:reference] = _ref.css('td').last.text.power_strip
     end
 
     print "parse_syllabus done: #{course_code}\n"
   end
 
   def parse_detail(course_code, c_hash)
-    r = RestClient.get @courses[c_hash]["url"]
+    r = RestClient.get @courses[c_hash][:url]
     doc = Nokogiri::HTML(r.to_s)
 
-    @courses[c_hash]["lecturer"] = doc.css('tr:contains("授課教師") td span').first.text
-    @courses[c_hash]["required"] = !(doc.css('tr:contains("選別") td').first.text.strip == '選修')
-    @courses[c_hash]["credits"] = Integer doc.css('tr:contains("學分數") td').first.text.strip
+    @courses[c_hash][:lecturer] = doc.css('tr:contains("授課教師") td span').first.text
+    @courses[c_hash][:required] = !(doc.css('tr:contains("選別") td').first.text.strip == '選修')
+    @courses[c_hash][:credits] = Integer doc.css('tr:contains("學分數") td').first.text.strip
 
     print "parse_detail done: #{course_code}\n"
   end
