@@ -60,6 +60,7 @@ class TtuCourseCrawler
       })
       groups = Hash[@doc.css('select[name="SelCl"] option').map {|s| [s[:value], s.text]}]
       groups.keys.each_with_index do |group_code, group_index|
+        group_code.gsub!('.', '')
         print "#{dep_code} - #{group_code}\n"
 
         sleep(1) until (
